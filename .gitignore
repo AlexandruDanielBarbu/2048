@@ -1,2 +1,5 @@
-2048
+2048.o
+game.o
+game
 files/save_files
+.vscode
