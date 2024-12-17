@@ -1,0 +1,15 @@
+
+,--.  ,--.  ,-----.  ,--.   ,--.     ,--------.  ,-----.      ,------.  ,--.      ,---.   ,--.   ,--. 
+|  '--'  | '  .-.  ' |  |   |  |     '--.  .--' '  .-.  '     |  .--. ' |  |     /  O  \   \  `.'  /  
+|  .--.  | |  | |  | |  |.'.|  |        |  |    |  | |  |     |  '--' | |  |    |  .-.  |   '.    /   
+|  |  |  | '  '-'  ' |   ,'.   |        |  |    '  '-'  '     |  | --'  |  '--. |  | |  |     |  |    
+`--'  `--'  `-----'  '--'   '--'        `--'     `-----'      `--'      `-----' `--' `--'     `--'    
+
+
+Main Menu: use WASD or arrow keys, Enter to select, Q to exit
+Game: use WASD or arrow keys, Q to exit, P to pause
+Resume: select "Resume" to continue the last game you played
+
+DEVELOPER HIGH SCORE: 432
+
+---Press any key to return to the main menu!---

@@ -1,0 +1,16 @@
+                                                                               ,---. 
+,--------. ,--.                        ,--.                                    |   | 
+'--.  .--' |  ,---.   ,--,--. ,--,--,  |  |,-.      ,--. ,--.  ,---.  ,--.,--. |  .' 
+   |  |    |  .-.  | ' ,-.  | |      \ |     /       \  '  /  | .-. | |  ||  | |  |  
+   |  |    |  | |  | \ '-'  | |  ||  | |  \  \        \   '   ' '-' ' '  ''  ' `--'  
+   `--'    `--' `--'  `--`--' `--''--' `--'`--'     .-'  /     `---'   `----'  .--.  
+                                                    `---'                      '--'  
+
+           Director: Barbu Alexandru Daniel
+    Lead programmer: Barbu Alexandru Daniel
+        QA testting: Barbu Alexandru Daniel
+                Art: NA
+        
+        ---Max dev score: ~1000---
+Proud creation of an ambitious computer science student!
+Facultatea de Automatica si Calculatoare - CTI 314CC 2024
