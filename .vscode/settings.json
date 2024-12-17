@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "helper_files.h": "c",
+        "game_parameters.h": "c"
+    }
+}

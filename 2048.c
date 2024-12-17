@@ -1,21 +1,7 @@
 // librarii necesare
-#include "helper.h"
-
-// fisiere externe
-#define PATH_saveTablaJoc "./files/tabla_joc"
-#define PATH_saveScore "./files/score"
-#define PATH_TEXT_howToPlay "./files/how_to_play.txt"
-#define PATH_TEXT_credits "./files/credits.txt"
-#define PATH_leaderBoard "./files/leaderboards"
-#define PATH_TEXT_gameOver "./files/game_over.txt"
-#define PATH_TEXT_mainMenu "./files/main_menu.txt"
-
-/*======GAMEPLAY LOOP======*/
-#define PANOU_CONTROL_H 5
-#define PANOU_JOC_H 20
-#define PADDING_LEFT 5
-#define PADDING_MIDDLE 10
-#define TIMER_SECONDS 30
+#include "game.h"
+#include "helper_files.h"
+#include "game_parameters.h"
 
 // organizarea liniilor conform directiei precizate
 void organise_rows(int *linie, int dir)
@@ -24,8 +10,7 @@ void organise_rows(int *linie, int dir)
     switch (dir)
     {
     // 0 sau 3 reprezinta directiile de la dreapta la stanga, respectiv de jos in sus
-    case 0:
-    case 3:
+    case 0: case 3:
         contor = 0;
         for (i = 0; i < 4; i++)
         {
@@ -44,8 +29,7 @@ void organise_rows(int *linie, int dir)
         }
         break;
     // pentru cazul 1 sau 2 al directiei se face acelasi lucur ca si mai sus, dar invers
-    case 2:
-    case 1:
+    case 2: case 1:
         contor = 3;
         for (i = 3; i >= 0; i--)
         {
@@ -73,55 +57,17 @@ void organise_column(int **tablaJoc, int columnToOrganise, int dir)
     // se copiaza coloana unei matrice intr-un vector
     int *column = (int *)malloc(4 * sizeof(int));
     for (i = 0; i < 4; i++)
-    {
         column[i] = tablaJoc[i][columnToOrganise];
-    }
 
     // se organizeaza coloana
     organise_rows(column, dir);
 
     // se reflecta schimbarile in matricea jocului
     for (i = 0; i < 4; i++)
-    {
         tablaJoc[i][columnToOrganise] = column[i];
-    }
 
     // se elibereaza vectorul auxiliar folosit
     free(column);
-}
-
-// verific daca mai este loc pe tabla de joc
-int eLoc(int **tablaJoc)
-{
-    int i, j;
-    for (i = 0; i < 4; i++)
-    {
-        for (j = 0; j < 4; j++)
-        {
-            if (tablaJoc[i][j] == 0)
-            {
-                return 1;
-            }
-        }
-    }
-    return 0;
-}
-
-// verific daca exista o celula cu numarul 2048 in ea
-int isWinner(int **tablaJoc)
-{
-    int i, j;
-    for (i = 0; i < 4; i++)
-    {
-        for (j = 0; j < 4; j++)
-        {
-            if (tablaJoc[i][j] == 2048)
-            {
-                return 1;
-            }
-        }
-    }
-    return 0;
 }
 
 // generez aleator un 2 sau 4 si il plasez in tabla de joc
@@ -165,9 +111,6 @@ void generate2or4(int **tablaJoc)
     }
 }
 
-// prototipul functiei
-void AIhandleCommand(int **tablaJoc, int *globalScore);
-
 // functie ce imi numara un anumit nr de secunde si executa la final o alta functie
 int Timer(WINDOW *gameInfoWindow, WINDOW *gameWindow, int max_terminal_x, int **tablaJoc, int *globalScore)
 {
@@ -206,15 +149,6 @@ int Timer(WINDOW *gameInfoWindow, WINDOW *gameWindow, int max_terminal_x, int **
     return 0;
 
 }
-
-// prototipul functiei mele detaliate mai jos
-int Movement(int **tablaJoc, int dir, int *nrOfCellsCleared);
-
-// codul ce va imbina logica de mai sus cu codul ncurses
-// prototipul functiei, deoarece vreau ca din GameLoop sa merg in MainMenu() si invers
-void GameLoop(int max_terminal_x, int max_terminal_y, int **tablaJoc, enum GameState state);
-
-void PrintTextFromFileInWindow(char *srcFileName, WINDOW *menuWindow);
 
 void PrintTablaJoc(int **tablaJoc, WINDOW *gameWindow)
 {
@@ -273,7 +207,7 @@ void GameInfoWindowText(WINDOW *gameInfoWindow, int max_terminal_x, int score)
     wrefresh(gameInfoWindow);
 }
 
-// aceasta functie apeleaza Mivement() si genereaza numarul random 2 sau 4 
+// aceasta functie apeleaza Movement() si genereaza numarul random 2 sau 4
 int ApplyMove(int **tablaJoc, int dir, int *nrOfCellsCleared)
 {
     int scor = Movement(tablaJoc, dir, nrOfCellsCleared);
@@ -379,21 +313,6 @@ void SubmitScore(WINDOW *gameWindow, int max_terminal_x, int score){
     clear();
     refresh();
 }
-/*======GAMEPLAY LOOP======*/
-
-
-/*======MENIUL PRINCIPAL======*/
-#define MENU_WINDOW_HEIGHT 50
-#define MENU_ITEMS_PADDING 10
-#define MENU_NUMBER_OF_OPTIONS 6
-
-// prototipul functiei detaliate mai jos
-void MainMenu(int max_terminal_x, int max_terminal_y, int **tablaJoc);
-/*======MENIUL PRINCIPAL======*/
-
-
-/*======LEADERBOARD======*/
-#define NR_OF_PLAYERS 5
 
 // la inceput de joc voi initializa Leaderboardul
 void InitLeaderboard(){
@@ -468,10 +387,8 @@ void PrintLeaderboard(int height, int width){
     clear();
     refresh();
 }
-/*======LEADERBOARD======*/
 
 // creeaza o fereastra cu dimensiunile date si prezinta continutul dintr-un fisier text
-#define MAX_MESSAGE_LENGTH 200
 void WindowDisplayText(int height, int width, char *srcFileName){
     WINDOW *menuWindow = newwin(height,width,0,0);
     box(menuWindow,0,0);
@@ -501,12 +418,6 @@ void PrintTextFromFileInWindow(char *srcFileName, WINDOW *menuWindow)
     fclose(src);
 }
 
-/*======PAUSE MENU======*/
-#define PAUSE_MENU_HEIGHT 5
-#define PAUSE_MENU_WIDTH 40
-#define PAUSE_MENU_X 3
-#define PAUSE_MENU_y 3
-
 // cod similar cu Credits si how to play
 void PauseMenuWindow(int y, int x){
 
@@ -526,8 +437,6 @@ void PauseMenuWindow(int y, int x){
     clear();
     refresh();
 }
-/*======PAUSE MENU======*/
-
 
 // functia main a programului
 int main(int argc, char **argv)
@@ -542,9 +451,7 @@ int main(int argc, char **argv)
     // alocare memorie pt tabla de joc pe care o voi flosi mereu pe parcursul jocului
     int **tablaJoc = (int **)calloc(4, sizeof(int *));
     for (i = 0; i < 4; i++)
-    {
         tablaJoc[i] = (int *)calloc(4, sizeof(int));
-    }
 
     // initializes partida
     initializareJoc();
@@ -629,9 +536,7 @@ void GameLoop(int max_terminal_x, int max_terminal_y, int **tablaJoc, enum GameS
         // analizez inputul
         switch (input)
         {
-        case 'w':
-        case 'W':
-        case KEY_UP:
+        case 'w': case 'W': case KEY_UP:
             // enum pt directie
             directie = 0;
             direction = up;
@@ -639,38 +544,30 @@ void GameLoop(int max_terminal_x, int max_terminal_y, int **tablaJoc, enum GameS
             SaveGame(tablaJoc,score);
             break;
 
-        case 'd':
-        case 'D':
-        case KEY_RIGHT:
+        case 'd': case 'D': case KEY_RIGHT:
             directie = 1;
             direction = right;
             SaveGame(tablaJoc,score);
             break;
 
-        case 's':
-        case 'S':
-        case KEY_DOWN:
+        case 's': case 'S': case KEY_DOWN:
             directie = 2;
             direction = down;
             SaveGame(tablaJoc,score);
             break;
 
-        case 'a':
-        case 'A':
-        case KEY_LEFT:
+        case 'a': case 'A': case KEY_LEFT:
             directie = 3;
             direction = left;
             SaveGame(tablaJoc,score);
             break;
 
-        case 'q':
-        case 'Q':
+        case 'q': case 'Q':
             // QUIT
             exitToMainMenu = 1;
             break;
 
-        case 'p':
-        case 'P':
+        case 'p': case 'P':
             // PAUSE
             PauseMenuWindow(15,6);
             
@@ -686,8 +583,7 @@ void GameLoop(int max_terminal_x, int max_terminal_y, int **tablaJoc, enum GameS
             directie = -1;
             break;
 
-        case 'u':
-        case 'U':
+        case 'u': case 'U':
             // UNDO
             LoadGame(tablaJoc,&score);
             direction = idle;
@@ -752,9 +648,8 @@ void AIhandleCommand(int **tablaJoc, int *globalScore)
     // aloc memorie pentru copie
     tablaJocCopy = (int **)malloc(4 * sizeof(int *));
     for (i = 0; i < 4; i++)
-    {
         tablaJocCopy[i] = (int *)malloc(4 * sizeof(int));
-    }
+
     // copiez efectiv tabla in copie
     CPYelement(tablaJoc, tablaJocCopy);
 
@@ -962,12 +857,9 @@ void MainMenu(int max_terminal_x, int max_terminal_y, int **tablaJoc)
 
         switch (select)
         {
-        case 'W':
-        case 'w':
-        case 'A':
-        case 'a':
-        case KEY_LEFT:
-        case KEY_UP:
+        case 'W': case 'w':
+        case 'A': case 'a':
+        case KEY_LEFT: case KEY_UP:
             highlight--;
             if (highlight < 0)
             {
@@ -975,12 +867,9 @@ void MainMenu(int max_terminal_x, int max_terminal_y, int **tablaJoc)
             }
             break;
 
-        case 'S':
-        case 's':
-        case 'D':
-        case 'd':
-        case KEY_RIGHT:
-        case KEY_DOWN:
+        case 'S': case 's':
+        case 'D': case 'd':
+        case KEY_RIGHT: case KEY_DOWN:
             highlight++;
             if (highlight > MENU_NUMBER_OF_OPTIONS - 1)
             {

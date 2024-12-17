@@ -25,7 +25,6 @@ typedef enum Direction{up, right, down, left, idle};
 
 /*======NCURSES======*/
 // constante necesare programului mare
-#define FOREVER 1
 
 // aceasta functie apeleaza alte functii specifice ncurses, pentru un gameplay placut :)
 void initializareJoc()
